@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Vue集成Cesium开发环境搭建 | Jacky&#39;s小黑屋</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://tianjzh.github.io/favicon.ico?v=1604368686666">
+<link rel="stylesheet" href="https://tianjzh.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="Vue集成Cesium开发环境搭建
+一、基础环境安装
+
+node.js （下载：https://nodejs.org/en/）
+webpack (全局安装  npm install webpack -g)(检测安装成功: webpack -..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://tianjzh.github.io">
+        <img src="https://tianjzh.github.io/images/avatar.png?v=1604368686666" class="site-logo">
+        <h1 class="site-title">Jacky&#39;s小黑屋</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      Jacky's Blog
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://tianjzh.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Vue集成Cesium开发环境搭建</h2>
+            <div class="post-date">2020-11-03</div>
+            
+            <div class="post-content" v-pre>
+              <p>Vue集成Cesium开发环境搭建</p>
+<h1 id="一-基础环境安装">一、基础环境安装</h1>
+<ul>
+<li>node.js （下载：https://nodejs.org/en/）</li>
+<li>webpack (全局安装  npm install webpack -g)(检测安装成功: webpack -v)</li>
+<li>vue -cli <code>npm install -g @vue/cli</code></li>
+</ul>
+<h1 id="二-vue项目搭建">二、vue项目搭建</h1>
+<h2 id="1-使用vue-cli初始化项目vue_cesium为项目名称">1、使用vue-cli，初始化项目（vue_cesium为项目名称）</h2>
+<pre><code class="language-js">vue init webpack vue_cesium
+</code></pre>
+<p>接下来就是一系列设置</p>
+<blockquote>
+<p>? Project name vue_cesium</p>
+<p>? Project description this is a vue cesium project</p>
+<p>? Author JackyTian <a href="mailto:fancyboy0908@163.com">fancyboy0908@163.com</a></p>
+<p>? Vue build runtime</p>
+<p>? Install vue-router? Yes</p>
+<p>? Use ESLint to lint your code? No</p>
+<p>? Set up unit tests No</p>
+<p>? Setup e2e tests with Nightwatch? No</p>
+<p>? Should we run <code>npm install</code> for you after the project has been created? (recommended) npm</p>
+</blockquote>
+<h2 id="2-安装相关的工具">2 、安装相关的工具</h2>
+<p>进入项目根目录</p>
+<pre><code class="language-js">npm install
+</code></pre>
+<h2 id="3-启动">3、启动</h2>
+<pre><code class="language-js">npm run dev
+</code></pre>
+<h1 id="三-cesium环境配置">三、Cesium环境配置</h1>
+<h2 id="1-安装cesium">1、安装Cesium</h2>
+<pre><code>npm install cesium --save
+</code></pre>
+<h2 id="2-在build目录下配置webpackbaseconfjs">2、在build目录下，配置webpack.base.conf.js</h2>
+<p>1）定义cesium源码路径</p>
+<pre><code>const cesiumSource = '../node_modules/cesium/Source'
+</code></pre>
+<p>2）在module.exports中，output添加sourcePrefix:' '，让webpack正确处理多行字符串</p>
+<pre><code class="language-js">output: {
+    path: config.build.assetsRoot,
+    filename: '[name].js',
+    publicPath: process.env.NODE_ENV === 'production'
+      ? config.build.assetsPublicPath
+      : config.dev.assetsPublicPath,
+    sourcePrefix: ' '
+},
+</code></pre>
+<p>3）在output后面，添加amd模式支持</p>
+<pre><code class="language-js">output: {...}，
+amd: {
+  toUrlUndefined: true
+},
+</code></pre>
+<p>4）在resolve中设置cesium别名，引入的时候直接根据别名就可以找到cesium包了</p>
+<pre><code class="language-js">resolve: {
+    extensions: ['.js', '.vue', '.json'],
+    alias: {
+      'vue$': 'vue/dist/vue.esm.js',
+      '@': resolve('src'),
+      'cesium': path.resolve(__dirname, cesiumSource)
+    }
+},
+</code></pre>
+<p>5）module里添加unknownContextCritical:false，让webpack打印载入特定库时候告警</p>
+<pre><code class="language-js">module: {
+   rules: [...],
+   unknownContextCritical: false,
+   // unknownContextRegExp: /^.\/.*$/,   //这个很多都推荐了，但是实测的时候发现会报错，先不用
+},
+</code></pre>
+<h2 id="3-配置webpackdevconfjs">3、配置webpack.dev.conf.js</h2>
+<p>1）配置路径</p>
+<pre><code class="language-js">const cesiumSource = 'node_modules/cesium/Source'
+const cesiumWorkers = '../Build/Cesium/Workers'
+</code></pre>
+<p>2）在plugins下面添加如下插件</p>
+<pre><code class="language-js">plugins: [
+   ...,
+    // Copy Cesium Assets, Widgets, and Workers to a static directory
+    new CopyWebpackPlugin([{ from: path.join(cesiumSource, cesiumWorkers), to: 'Workers' }]),
+    new CopyWebpackPlugin([{ from: path.join(cesiumSource, 'Assets'), to: 'Assets' }]),
+    new CopyWebpackPlugin([{ from: path.join(cesiumSource, 'Widgets'), to: 'Widgets' }]),
+    new CopyWebpackPlugin([{ from: path.join(cesiumSource, 'ThirdParty/Workers'), to: 'ThirdParty/Workers' }]),
+    new webpack.DefinePlugin({
+       // Define relative base path in cesium for loading assets
+       CESIUM_BASE_URL: JSON.stringify('')
+    })
+]
+</code></pre>
+<h2 id="4-配置webpackprodconfjs文件">4、配置webpack.prod.conf.js文件</h2>
+<p>1）配置路径</p>
+<pre><code class="language-js">const cesiumSource = 'node_modules/cesium/Source'
+const cesiumWorkers = '../Build/Cesium/Workers'
+</code></pre>
+<p>2）在plugins下面添加如下插件，拷贝静态资源。与dev配置略有不同</p>
+<pre><code class="language-js">plugins: [
+   ...,
+    // Copy Cesium Assets, Widgets, and Workers to a static directory
+    new CopyWebpackPlugin([{ from: path.join(cesiumSource, cesiumWorkers), to: 'Workers' }]),
+    new CopyWebpackPlugin([{ from: path.join(cesiumSource, 'Assets'), to: 'Assets' }]),
+    new CopyWebpackPlugin([{ from: path.join(cesiumSource, 'Widgets'), to: 'Widgets' }]),
+    new CopyWebpackPlugin([{ from: path.join(cesiumSource, 'ThirdParty/Workers'), to: 'ThirdParty/Workers' }]),
+    new webpack.DefinePlugin({
+       // 定义Cesium从哪里加载资源，如果使用默认的''，却变成了绝对路径了，所以这里使用'./'，使用相对路径
+       CESIUM_BASE_URL: JSON.stringify('./')
+    })
+]
+</code></pre>
+<h2 id="5-修改config里indexjs文件build中的assetspublicpath">5、修改config里index.js文件，build中的assetsPublicPath:&quot;./&quot;</h2>
+<pre><code class="language-js">assetsSubDirectory: 'static',
+assetsPublicPath: '',
+</code></pre>
+<h1 id="四-调用cesium">四、调用Cesium</h1>
+<h2 id="1-配置mainjs">1、配置main.js</h2>
+<pre><code class="language-js">import Vue from 'vue'
+import App from './App'
+import router from './router'
+
+Vue.config.productionTip = false
+
+// 全局引用Cesium
+import * as Cesium from 'cesium/Cesium.js'
+import widgets from 'cesium/Widgets/widgets.css'
+// 注册全局变量
+Vue.prototype.Cesium = Cesium
+Vue.prototype.widgets = widgets
+Vue.config.productionTip = false
+
+/* eslint-disable no-new */
+new Vue({
+  el: '#app',
+  router,
+  render: h =&gt; h(App)
+})
+
+</code></pre>
+<p>这一步需要尤其注意，Cesium 1.63 版本之前是用的AMD的方式进行编译的，可以采用<code>import Cesium from 'cesium/Cesium'</code>的方式进行引入；但是1.63版时使用ES6进行了重构，1.63之后的版本，导入模块时应该使用如下方式：</p>
+<pre><code class="language-js">import * as Cesium from &quot;cesium/Source/Cesium.js&quot;
+//或者：
+import {Viewer} from &quot;cesium/Source/Cesium.js&quot;
+</code></pre>
+<h2 id="2-直接在组件中调用">2、直接在组件中调用</h2>
+<p>1）新建一个cesiumViewer的组件</p>
+<p>src\components\cesiumViewer.vue</p>
+<pre><code class="language-html">&lt;template&gt;
+    &lt;div id=&quot;cesiumContainer&quot;&gt;&lt;/div&gt;
+&lt;/template&gt;
+
+
+&lt;script&gt;
+export default {
+  name: 'cesiumViewer',
+  data () {
+    return {}
+  },
+  mounted () {
+    var viewer = new this.Cesium.Viewer('cesiumContainer')
+    viewer._cesiumWidget._creditContainer.style.display = 'none'
+  }
+}
+
+&lt;/script&gt;
+
+
+&lt;style scoped&gt;
+   #cesiumContainer {
+     width: 100%;
+     height: 100%;
+  }
+&lt;/style&gt;
+</code></pre>
+<p>2）修改App.vue</p>
+<pre><code class="language-html">&lt;template&gt;
+  &lt;div id=&quot;app&quot;&gt;
+    &lt;!--    &lt;img src=&quot;./assets/logo.png&quot;&gt;--&gt;
+    &lt;!--    &lt;router-view/&gt;--&gt;
+    &lt;CesiumViewer&gt;&lt;/CesiumViewer&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+
+
+&lt;script&gt;
+import CesiumViewer from './components/cesiumViewer'
+
+export default {
+  name: 'App',
+  components: {CesiumViewer},
+}
+&lt;/script&gt;
+
+
+&lt;style&gt;
+html, body {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+    
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
+&lt;/style&gt;
+</code></pre>
+<p>3）修改router目录下index文件，注册组件</p>
+<pre><code class="language-html">import Vue from 'vue'
+import Router from 'vue-router'
+import HelloWorld from '@/components/HelloWorld'
+//引入页面
+import cesiumViewer from '@/components/cesiumViewer'
+
+Vue.use(Router)
+
+export default new Router({
+  routes: [
+    {
+      path: '/',
+      name: 'HelloWorld',
+      component: HelloWorld
+    },
+    //注册组件
+    {
+      path: '/',
+      name: 'cesiumViewer',
+      component: cesiumViewer
+    }
+  ]
+})
+</code></pre>
+<p>到此，所有配置全部结束，启动服务即可。</p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://tianjzh.github.io/post/vue-ji-cheng-cesium-kai-fa-huan-jing-da-jian/">
+                  <h3 class="post-title">
+                    Vue集成Cesium开发环境搭建测试
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+
+  </body>
+</html>
