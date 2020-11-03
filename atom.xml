@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tianjzh.github.io</id>
     <title>Jacky&apos;s小黑屋</title>
-    <updated>2020-11-03T02:17:37.524Z</updated>
+    <updated>2020-11-03T02:19:05.132Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tianjzh.github.io"/>
     <link rel="self" href="https://tianjzh.github.io/atom.xml"/>
@@ -257,129 +257,6 @@ export default new Router({
 </code></pre>
 <p>到此，所有配置全部结束，启动服务即可。<br>
 <img src="https://tianjzh.github.io/post-images/1604369447495.png" alt="" loading="lazy"></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Vue集成Cesium开发环境搭建测试]]></title>
-        <id>https://tianjzh.github.io/post/vue-ji-cheng-cesium-kai-fa-huan-jing-da-jian/</id>
-        <link href="https://tianjzh.github.io/post/vue-ji-cheng-cesium-kai-fa-huan-jing-da-jian/">
-        </link>
-        <updated>2020-11-02T08:00:08.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="一-基础环境安装">一、基础环境安装</h1>
-<ul>
-<li>node.js （下载：https://nodejs.org/en/）</li>
-<li>webpack (全局安装  npm install webpack -g)(检测安装成功: webpack -v)</li>
-<li>vue -cli <code>npm install -g @vue/cli</code></li>
-</ul>
-<h1 id="二-vue项目搭建">二、vue项目搭建</h1>
-<h2 id="1-使用vue-cli初始化项目vue_cesium为项目名称">1、使用vue-cli，初始化项目（vue_cesium为项目名称）</h2>
-<p><code>vue init webpack vue_cesium</code><br>
-接下来就是一系列设置<br>
-? Project name vue_cesium<br>
-? Project description this is a vue cesium project<br>
-? Author JackyTian <a href="mailto:fancyboy0908@163.com">fancyboy0908@163.com</a><br>
-? Vue build runtime<br>
-? Install vue-router? Yes<br>
-? Use ESLint to lint your code? No<br>
-? Set up unit tests No<br>
-? Setup e2e tests with Nightwatch? No<br>
-? Should we run <code>npm install</code> for you after the project has been created? (recommended) npm</p>
-<h2 id="2-安装相关的工具">2 、安装相关的工具</h2>
-<p>进入项目根目录<br>
-<code>npm install</code></p>
-<h2 id="3-启动">3、启动</h2>
-<p><code>npm run dev</code></p>
-<h1 id="三-cesium环境配置">三、Cesium环境配置</h1>
-<h2 id="1-安装cesium">1、安装Cesium</h2>
-<p><code>npm install cesium --save</code></p>
-<h2 id="2-在build目录下配置webpackbaseconfjs">2、在build目录下，配置webpack.base.conf.js</h2>
-<p>1）定义cesium源码路径<br>
-<code>const cesiumSource = '../node_modules/cesium/Source'</code><br>
-2）在module.exports中，output添加sourcePrefix:' '，让webpack正确处理多行字符串<br>
-<code>output: { path: config.build.assetsRoot, filename: '[name].js', publicPath: process.env.NODE_ENV === 'production' ? config.build.assetsPublicPath : config.dev.assetsPublicPath, sourcePrefix: ' ' },</code><br>
-3）在output后面，添加amd模式支持<br>
-<code>output: {...}， amd: { toUrlUndefined: true },</code><br>
-4）在resolve中设置cesium别名，引入的时候直接根据别名就可以找到cesium包了<br>
-<code>resolve: { extensions: ['.js', '.vue', '.json'], alias: { 'vue$': 'vue/dist/vue.esm.js', '@': resolve('src'), 'cesium': path.resolve(__dirname, cesiumSource) } },</code><br>
-5）module里添加unknownContextCritical:false，让webpack打印载入特定库时候告警<br>
-<code>module: { rules: [...], unknownContextCritical: false, // unknownContextRegExp: /^.\/.*$/, //这个很多都推荐了，但是实测的时候发现会报错，先不用 },</code></p>
-<h2 id="3-配置webpackdevconfjs">3、配置webpack.dev.conf.js</h2>
-<p>1）配置路径<br>
-<code>const cesiumSource = 'node_modules/cesium/Source' const cesiumWorkers = '../Build/Cesium/Workers'</code><br>
-2）在plugins下面添加如下插件<br>
-<code>plugins: [ ..., // Copy Cesium Assets, Widgets, and Workers to a static directory new CopyWebpackPlugin([{ from: path.join(cesiumSource, cesiumWorkers), to: 'Workers' }]), new CopyWebpackPlugin([{ from: path.join(cesiumSource, 'Assets'), to: 'Assets' }]), new CopyWebpackPlugin([{ from: path.join(cesiumSource, 'Widgets'), to: 'Widgets' }]), new CopyWebpackPlugin([{ from: path.join(cesiumSource, 'ThirdParty/Workers'), to: 'ThirdParty/Workers' }]), new webpack.DefinePlugin({ // Define relative base path in cesium for loading assets CESIUM_BASE_URL: JSON.stringify('') }) ]</code></p>
-<h2 id="4-配置webpackprodconfjs文件">4、配置webpack.prod.conf.js文件</h2>
-<p>1）配置路径<br>
-<code>const cesiumSource = 'node_modules/cesium/Source' const cesiumWorkers = '../Build/Cesium/Workers'</code><br>
-2）在plugins下面添加如下插件，拷贝静态资源。与dev配置略有不同<br>
-<code>plugins: [ ..., // Copy Cesium Assets, Widgets, and Workers to a static directory new CopyWebpackPlugin([{ from: path.join(cesiumSource, cesiumWorkers), to: 'Workers' }]), new CopyWebpackPlugin([{ from: path.join(cesiumSource, 'Assets'), to: 'Assets' }]), new CopyWebpackPlugin([{ from: path.join(cesiumSource, 'Widgets'), to: 'Widgets' }]), new CopyWebpackPlugin([{ from: path.join(cesiumSource, 'ThirdParty/Workers'), to: 'ThirdParty/Workers' }]), new webpack.DefinePlugin({ // 定义Cesium从哪里加载资源，如果使用默认的''，却变成了绝对路径了，所以这里使用'./'，使用相对路径 CESIUM_BASE_URL: JSON.stringify('./') }) ]</code></p>
-<h2 id="5-修改config里indexjs文件build中的assetspublicpath">5、修改config里index.js文件，build中的assetsPublicPath:&quot;./&quot;</h2>
-<p><code>assetsSubDirectory: 'static', assetsPublicPath: '',</code></p>
-<h1 id="四-调用cesium">四、调用Cesium</h1>
-<h2 id="1-配置mainjs">1、配置main.js</h2>
-<p>`import Cesium from 'cesium/Cesium'<br>
-import widgets from 'cesium/Widgets/widgets.css'</p>
-<p>Vue.prototype.Cesium = Cesium<br>
-Vue.prototype.widgets = widgets`</p>
-<h2 id="2-直接在组件中调用">2、直接在组件中调用</h2>
-<p>var Cesium = this.Cesium<br>
-Cesium...</p>
-<p>新建一个cesiumViewer的组件<br>
-src\components\cesiumViewer.vue<br>
-`<template><br>
-<div id="cesiumContainer"></div><br>
-</template></p>
-<script>
-export default {
-  name: 'cesiumViewer',
-  data () {
-    return {}
-  },
-  mounted () {
-    var viewer = new this.Cesium.Viewer('cesiumContainer')
-    viewer._cesiumWidget._creditContainer.style.display = 'none'
-  }
-}
-</script>
-<style scoped>
-   #cesiumContainer {
-    width: 100%;
-    height: 100%;
-  }
-
-</style>`
-<p>修改App.vue<br>
-`<template></p>
-  <div id="app">
-<!--    <img src="./assets/logo.png">-->
-<!--    <router-view/>-->
-    <CesiumViewer></CesiumViewer>
-  </div>
-</template>
-<script>
-import CesiumViewer from './components/cesiumViewer'
-export default {
-  name: 'App',
-  components: {CesiumViewer},
-}
-</script>
-<style>
-html, body {
-  width: 100%;
-  height: 100%;
-  padding: 0;
-  margin: 0;
-}
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
-<p>`</p>
 ]]></content>
     </entry>
     <entry>
