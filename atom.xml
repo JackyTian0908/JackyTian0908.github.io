@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tianjzh.github.io</id>
     <title>Jacky&apos;s小黑屋</title>
-    <updated>2020-11-03T02:35:20.571Z</updated>
+    <updated>2020-12-22T09:54:48.937Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tianjzh.github.io"/>
     <link rel="self" href="https://tianjzh.github.io/atom.xml"/>
@@ -10,6 +10,287 @@
     <logo>https://tianjzh.github.io/images/avatar.png</logo>
     <icon>https://tianjzh.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Jacky&apos;s小黑屋</rights>
+    <entry>
+        <title type="html"><![CDATA[在vue项目中使用prismjs]]></title>
+        <id>https://tianjzh.github.io/post/zai-vue-xiang-mu-zhong-shi-yong-prismjs/</id>
+        <link href="https://tianjzh.github.io/post/zai-vue-xiang-mu-zhong-shi-yong-prismjs/">
+        </link>
+        <updated>2020-12-22T09:49:28.000Z</updated>
+        <summary type="html"><![CDATA[<p>prismjs是一款代码高亮美化插件，在一些技术博客类的网站中需要展示代码时，可以使用它类似与markdown的代码块，</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>prismjs是一款代码高亮美化插件，在一些技术博客类的网站中需要展示代码时，可以使用它类似与markdown的代码块，</p>
+<!-- more -->
+<p><a href="https://prismjs.com/index.html">官网链接：https://prismjs.com/index.html</a></p>
+<h1 id="1-安装插件">1、安装插件</h1>
+<pre><code class="language-js">//安装prismjs 插件
+npm install prismjs -S
+
+//安装prismjs的编译器插件
+npm install babel-plugin-prismjs -D
+</code></pre>
+<h1 id="2-配置插件">2、配置插件</h1>
+<p>在.babelrc文件中plugins追加以下配置，如果原本没有plugins可以手动添加</p>
+<pre><code class="language-js">//.babelrc文件配置后的plugins选项内容
+&quot;plugins&quot;: [&quot;transform-vue-jsx&quot;, &quot;transform-runtime&quot;,
+    [&quot;prismjs&quot;, {
+      &quot;languages&quot;: [&quot;javascript&quot;, &quot;css&quot;, &quot;markup&quot;],
+      &quot;plugins&quot;: [&quot;line-numbers&quot;],
+      &quot;theme&quot;: &quot;twilight&quot;,
+      &quot;css&quot;: true
+    }]
+  ]
+</code></pre>
+<h1 id="3-在项目中引入模块">3、在项目中引入模块</h1>
+<pre><code class="language-js">import Prism from &quot;prismjs&quot;;
+</code></pre>
+<p><strong>在钩子函数mounted中添加</strong></p>
+<pre><code>Prism.highlightAll()
+</code></pre>
+<h1 id="4-在需要美化的代码块中添加class">4、在需要美化的代码块中添加class</h1>
+<p>注意这里的html结构是<code>pre</code>包裹着<code>code</code></p>
+<h2 id="类名的含义">类名的含义</h2>
+<p>xxxxxxxxxx line-numbers<code>显示行号</code>language-xxx<code>或</code>lang-xxx<code>选择编程语言，如：</code>language-js</p>
+<h2 id="类名对照表">类名对照表</h2>
+<p>横杠<code>-</code>前的是语言，横杠后的是对应类名：<br>
+如：<code>JavaScript - javascript, js</code><br>
+对应的类名是：<code>language-js</code>or<code>language-javascript</code>,以此类推</p>
+<pre><code class="language-markdown">Markup - markup, html, xml, svg, mathml, ssml, atom, rss
+CSS - css
+C-like - clike
+JavaScript - javascript, js
+ABAP - abap
+ABNF - abnf
+ActionScript - actionscript
+Ada - ada
+Agda - agda
+AL - al
+ANTLR4 - antlr4, g4
+Apache Configuration - apacheconf
+APL - apl
+AppleScript - applescript
+AQL - aql
+Arduino - arduino
+ARFF - arff
+AsciiDoc - asciidoc, adoc
+ASP.NET (C#) - aspnet
+6502 Assembly - asm6502
+AutoHotkey - autohotkey
+AutoIt - autoit
+Bash - bash, shell
+BASIC - basic
+Batch - batch
+BBcode - bbcode, shortcode
+Birb - birb
+Bison - bison
+BNF - bnf, rbnf
+Brainfuck - brainfuck
+BrightScript - brightscript
+Bro - bro
+BSL (1C:Enterprise) - bsl, oscript
+C - c
+C# - csharp, cs, dotnet
+C++ - cpp
+CIL - cil
+Clojure - clojure
+CMake - cmake
+CoffeeScript - coffeescript, coffee
+Concurnas - concurnas, conc
+Content-Security-Policy - csp
+Crystal - crystal
+CSS Extras - css-extras
+Cypher - cypher
+D - d
+Dart - dart
+DAX - dax
+Dhall - dhall
+Diff - diff
+Django/Jinja2 - django, jinja2
+DNS zone file - dns-zone-file, dns-zone
+Docker - docker, dockerfile
+EBNF - ebnf
+EditorConfig - editorconfig
+Eiffel - eiffel
+EJS - ejs, eta
+Elixir - elixir
+Elm - elm
+Embedded Lua templating - etlua
+ERB - erb
+Erlang - erlang
+Excel Formula - excel-formula, xlsx, xls
+F# - fsharp
+Factor - factor
+Firestore security rules - firestore-security-rules
+Flow - flow
+Fortran - fortran
+FreeMarker Template Language - ftl
+GameMaker Language - gml, gamemakerlanguage
+G-code - gcode
+GDScript - gdscript
+GEDCOM - gedcom
+Gherkin - gherkin
+Git - git
+GLSL - glsl
+Go - go
+GraphQL - graphql
+Groovy - groovy
+Haml - haml
+Handlebars - handlebars
+Haskell - haskell, hs
+Haxe - haxe
+HCL - hcl
+HLSL - hlsl
+HTTP - http
+HTTP Public-Key-Pins - hpkp
+HTTP Strict-Transport-Security - hsts
+IchigoJam - ichigojam
+Icon - icon
+.ignore - ignore, gitignore, hgignore, npmignore
+Inform 7 - inform7
+Ini - ini
+Io - io
+J - j
+Java - java
+JavaDoc - javadoc
+JavaDoc-like - javadoclike
+Java stack trace - javastacktrace
+Jolie - jolie
+JQ - jq
+JSDoc - jsdoc
+JS Extras - js-extras
+JSON - json, webmanifest
+JSON5 - json5
+JSONP - jsonp
+JS stack trace - jsstacktrace
+JS Templates - js-templates
+Julia - julia
+Keyman - keyman
+Kotlin - kotlin, kt, kts
+LaTeX - latex, tex, context
+Latte - latte
+Less - less
+LilyPond - lilypond, ly
+Liquid - liquid
+Lisp - lisp, emacs, elisp, emacs-lisp
+LiveScript - livescript
+LLVM IR - llvm
+LOLCODE - lolcode
+Lua - lua
+Makefile - makefile
+Markdown - markdown, md
+Markup templating - markup-templating
+MATLAB - matlab
+MEL - mel
+Mizar - mizar
+MongoDB - mongodb
+Monkey - monkey
+MoonScript - moonscript, moon
+N1QL - n1ql
+N4JS - n4js, n4jsd
+Nand To Tetris HDL - nand2tetris-hdl
+Naninovel Script - naniscript, nani
+NASM - nasm
+NEON - neon
+nginx - nginx
+Nim - nim
+Nix - nix
+NSIS - nsis
+Objective-C - objectivec, objc
+OCaml - ocaml
+OpenCL - opencl
+Oz - oz
+PARI/GP - parigp
+Parser - parser
+Pascal - pascal, objectpascal
+Pascaligo - pascaligo
+PC-Axis - pcaxis, px
+PeopleCode - peoplecode, pcode
+Perl - perl
+PHP - php
+PHPDoc - phpdoc
+PHP Extras - php-extras
+PL/SQL - plsql
+PowerQuery - powerquery, pq, mscript
+PowerShell - powershell
+Processing - processing
+Prolog - prolog
+.properties - properties
+Protocol Buffers - protobuf
+Pug - pug
+Puppet - puppet
+Pure - pure
+PureBasic - purebasic, pbfasm
+PureScript - purescript, purs
+Python - python, py
+Q (kdb+ database) - q
+QML - qml
+Qore - qore
+R - r
+Racket - racket, rkt
+React JSX - jsx
+React TSX - tsx
+Reason - reason
+Regex - regex
+Ren'py - renpy, rpy
+reST (reStructuredText) - rest
+Rip - rip
+Roboconf - roboconf
+Robot Framework - robotframework, robot
+Ruby - ruby, rb
+Rust - rust
+SAS - sas
+Sass (Sass) - sass
+Sass (Scss) - scss
+Scala - scala
+Scheme - scheme
+Shell session - shell-session, sh-session, shellsession
+Smali - smali
+Smalltalk - smalltalk
+Smarty - smarty
+SML - sml, smlnj
+Solidity (Ethereum) - solidity, sol
+Solution file - solution-file, sln
+Soy (Closure Template) - soy
+SPARQL - sparql, rq
+Splunk SPL - splunk-spl
+SQF: Status Quo Function (Arma 3) - sqf
+SQL - sql
+Stan - stan
+Structured Text (IEC 61131-3) - iecst
+Stylus - stylus
+Swift - swift
+T4 templating - t4-templating
+T4 Text Templates (C#) - t4-cs, t4
+T4 Text Templates (VB) - t4-vb
+TAP - tap
+Tcl - tcl
+Template Toolkit 2 - tt2
+Textile - textile
+TOML - toml
+Turtle - turtle, trig
+Twig - twig
+TypeScript - typescript, ts
+TypoScript - typoscript, tsconfig
+UnrealScript - unrealscript, uscript, uc
+Vala - vala
+VB.Net - vbnet
+Velocity - velocity
+Verilog - verilog
+VHDL - vhdl
+vim - vim
+Visual Basic - visual-basic, vb, vba
+WarpScript - warpscript
+WebAssembly - wasm
+Wiki markup - wiki
+Xeora - xeora, xeoracube
+XML doc (.net) - xml-doc
+Xojo (REALbasic) - xojo
+XQuery - xquery
+YAML - yaml, yml
+YANG - yang
+Zig - zig
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Vue集成Cesium开发环境搭建]]></title>
         <id>https://tianjzh.github.io/post/vue-ji-cheng-cesium-kai-fa-huan-jing-da-jian-1/</id>
